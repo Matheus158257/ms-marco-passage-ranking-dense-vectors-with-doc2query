@@ -69,7 +69,7 @@ def load_triple(path, max_i=None):
             if max_i != None and i > max_i:
                 break
     return triples
-    
+
 def load_txts_topk(folder,k=1,n=18,encoding="cp1252"):
     k = k if k<=80 else 80
     n = n if n<=18 else 18
@@ -92,4 +92,4 @@ def load_txts_topk(folder,k=1,n=18,encoding="cp1252"):
                             
         txts.append(rows)
 
-return txts
+    return txts
