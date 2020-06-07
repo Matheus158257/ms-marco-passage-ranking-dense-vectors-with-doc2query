@@ -1,8 +1,9 @@
-'''Converts MS MARCO doc-query pairs to the OpenNMT format.'''
+'''Getting data from MS MARCO datsets'''
 import collections
 import functools
 import traceback
 import sys
+import os
 
 
 
@@ -68,3 +69,27 @@ def load_triple(path, max_i=None):
             if max_i != None and i > max_i:
                 break
     return triples
+    
+ def load_txts_topk(folder,k=1,n=18,encoding="cp1252"):
+    k = k if k<=80 else 80
+    n = n if n<=18 else 18
+    nsamples = [i for i in range(0,k)] #[0] ou [0,1,2,3...]
+    nparts = [i for i in range(0,n)] #cada bloco é de 17
+    extension_template2 = '-1004000'
+    
+    txts = []
+    for sample in nsamples:
+        rows = []
+        for part in nparts:
+            name_template = 'predicted_queries_topk_sample0' if sample>9 else 'predicted_queries_topk_sample00'
+            extension_template1 = '.txt0' if part>9 else '.txt00'
+            
+            file_name = f"{name_template}{str(sample)}{extension_template1}{str(part)}{extension_template2}"
+            path = os.path.join( folder,file_name)
+            txt_reader = open(path,mode = "r",encoding = encoding,errors='ignore')
+            for row in txt_reader:
+                rows.append([(elem.replace("\n","")) for elem in row])
+                            
+        txts.append(rows)
+    
+    return txts
