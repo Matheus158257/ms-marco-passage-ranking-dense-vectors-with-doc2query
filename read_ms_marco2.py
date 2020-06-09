@@ -59,7 +59,7 @@ def load_doc2query(path,encoding="cp1252"):
 
 def load_triple(path,encoding="cp1252", max_i=None):
     """Load triple tsv into python dict."""
-    triples = collections.defaultdict(set)
+    triples = {}
     with open(path) as f:
         for i, line in enumerate(f):
             qid, pid, nid = line.rstrip().split('\t')
