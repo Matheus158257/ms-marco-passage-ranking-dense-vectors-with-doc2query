@@ -63,7 +63,7 @@ def load_triple(path,encoding="cp1252", max_i=None):
     with open(path, encoding=encoding, newline='') as f:
         for i, line in enumerate(f):
             qid, pid, nid = line.rstrip().split('\t')
-            triples[i] = qid.replace('"', ''), pid.replace('"', ''), nid.replace('"', '')
+            triples[str(i)] = qid.replace('"', ''), pid.replace('"', ''), nid.replace('"', '')
             if i % 100000 == 0:
                 print('Loading triple {}'.format(i))
             if max_i != None and i > max_i:
