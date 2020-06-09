@@ -26,7 +26,7 @@ def load_queries(path,encoding="cp1252"):
   with open(path, encoding=encoding, newline='') as f:
     for i, line in enumerate(f):
       query_id, query = line.rstrip().split('\t')
-      queries[query_id] = query.strip('\"')
+      queries[query_id] = query.replace('"', '')
       if i % 100000 == 0:
         print('Loading queries {}'.format(i))
   return queries
@@ -38,7 +38,7 @@ def load_collection(path,encoding="cp1252"):
   with open(path,encoding=encoding, newline='') as f:
     for i, line in enumerate(f):
       doc_id, doc_text = line.rstrip().split('\t')
-      collection[doc_id] = doc_text.replace('\n', ' ').strip('\"')
+      collection[doc_id] = doc_text.replace('\n', ' ').replace('"', '')
       if i % 1000000 == 0:
         print('Loading collection, doc {}'.format(i))
 
@@ -50,7 +50,7 @@ def load_doc2query(path,encoding="cp1252"):
   with open(path, encoding=encoding, newline='') as f:
     for i, line in enumerate(f):
       doc_text = line.rstrip()
-      collection[str(i)] = doc_text.replace('\n', ' ').strip('\"')
+      collection[str(i)] = doc_text.replace('\n', ' ').replace('"', '')
       if i % 1000000 == 0:
         print('Loading doc2query, doc {}'.format(i))
 
@@ -63,7 +63,7 @@ def load_triple(path,encoding="cp1252", max_i=None):
     with open(path, encoding=encoding, newline='') as f:
         for i, line in enumerate(f):
             qid, pid, nid = line.rstrip().split('\t')
-            triples[i] = qid.strip('\"'), pid.strip('\"'), nid.strip('\"')
+            triples[i] = qid.replace('"', ''), pid.replace('"', ''), nid.replace('"', '')
             if i % 100000 == 0:
                 print('Loading triple {}'.format(i))
             if max_i != None and i > max_i:
