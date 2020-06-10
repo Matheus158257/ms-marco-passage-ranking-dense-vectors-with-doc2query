@@ -49,7 +49,7 @@ def load_doc2query(path,encoding="cp1252"):
   collection = {}
   with open(path, encoding=encoding, newline='') as f:
     for i, line in enumerate(f):
-      doc_text = line.rstrip()
+      doc_id, doc_text = line.rstrip().split('\t')
       collection[str(i)] = doc_text.replace('\n', ' ').replace('"', '')
       if i % 1000000 == 0:
         print('Loading doc2query, doc {}'.format(i))
