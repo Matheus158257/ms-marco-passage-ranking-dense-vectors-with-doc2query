@@ -6,11 +6,11 @@ import sys
 import os
 
 
-
+#-------------------- Funcios to read tsv as dicts
 def load_qrels(path,encoding="cp1252"):
   """Loads qrels into a dict of key: query id, value: set of relevant doc ids."""
   qrels = collections.defaultdict(set)
-  with open(path, encoding=encoding, newline='') as f:
+  with open(path) as f:
     for i, line in enumerate(f):
       query_id, _, doc_id, relevance = line.rstrip().split('\t')
       if int(relevance) >= 1:
@@ -23,10 +23,10 @@ def load_qrels(path,encoding="cp1252"):
 def load_queries(path,encoding="cp1252"):
   """Loads queries into a dict of key: query id, value: query text."""
   queries = {}
-  with open(path, encoding=encoding, newline='') as f:
+  with open(path) as f:
     for i, line in enumerate(f):
       query_id, query = line.rstrip().split('\t')
-      queries[query_id] = query.replace('"', '')
+      queries[query_id] = query
       if i % 100000 == 0:
         print('Loading queries {}'.format(i))
   return queries
@@ -69,7 +69,8 @@ def load_triple(path,encoding="cp1252", max_i=None):
             if max_i != None and i > max_i:
                 break
     return triples
-
+    
+#-------------------- Funcion to get the passages as top docTTTTTqueries
 def load_txts_topk(folder,k=1,n=18,encoding="cp1252"):
     k = k if k<=80 else 80
     n = n if n<=18 else 18
@@ -93,3 +94,28 @@ def load_txts_topk(folder,k=1,n=18,encoding="cp1252"):
         txts.append(rows)
 
     return txts
+    
+    
+   
+ #-------------------- Funcion work with dicts as train, valid, test datasets
+def take_part(d,n_elements):
+    elements =  [str(x) for x in range(n_elements + 1)]
+    newdict = {key:d[key] for key in elements}
+    return newdict
+  
+def reset_dict_keys(original_dict): 	
+    new_dict = {} 	
+    for i, (k, v) in enumerate(original_dict.items()):
+      new_dict[str(i)] = v
+    return new_dict
+ 
+def train_val_test(d, tr, vl, ts):
+    elements =  [str(x) for x in range(tr)]
+    train = {key:d[key] for key in elements}
+    elements =  [str((x + tr)) for x in range(vl)]
+    val = {key:d[key] for key in elements}
+    val = reset_dict_keys(val)
+    elements =  [str((x + tr + vl)) for x in range(ts)]
+    test = {key:d[key] for key in elements}
+    test = reset_dict_keys(test)
+    return train, val, test
